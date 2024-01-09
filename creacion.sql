@@ -1,9 +1,9 @@
 -- Eliminar la base de datos si existe
 
---use master;
---GO
+-- use master;
+-- GO
 
---DROP DATABASE AgroservicioDB;
+-- DROP DATABASE AgroservicioDB;
 
 
 CREATE DATABASE AgroservicioDB;
@@ -41,7 +41,14 @@ CREATE TABLE Categoria(
     id INT IDENTITY(1, 1) PRIMARY KEY,
     nombre_cat VARCHAR(50) 
 );
-
+CREATE TABLE Proveedor(
+    id_prov INT IDENTITY(1, 1) PRIMARY KEY,
+    ci_prov VARCHAR(10),
+    nombre_prov VARCHAR(50),
+    direccion_prov VARCHAR(50),
+    telefono VARCHAR(10) CHECK (LEN(telefono) = 10 AND telefono NOT LIKE '%[^0-9]%'),
+    email VARCHAR(50) CHECK (CHARINDEX('@', email) > 0)
+)
 CREATE TABLE Producto(
     codigo INT IDENTITY(1, 1) PRIMARY KEY,
     nombre_prod VARCHAR(50) UNIQUE,
@@ -74,14 +81,7 @@ CREATE TABLE DetalleFacturaVenta(
     PRIMARY KEY (codigo_factura, codigo_producto)
 )
 
-CREATE TABLE Proveedor(
-    id_prov INT IDENTITY(1, 1) PRIMARY KEY,
-    ci_prov VARCHAR(10),
-    nombre_prov VARCHAR(50),
-    direccion_prov VARCHAR(50),
-    telefono VARCHAR(10) CHECK (LEN(telefono) = 10 AND telefono NOT LIKE '%[^0-9]%'),
-    email VARCHAR(50) CHECK (CHARINDEX('@', email) > 0)
-)
+
 
 CREATE TABLE FacturaCompra(
     secuencia INT IDENTITY(1, 1) PRIMARY KEY,
