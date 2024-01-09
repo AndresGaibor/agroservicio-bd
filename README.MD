@@ -59,7 +59,7 @@ setx DB_PASSWORD "<colocar la clave del usuario de la base de datos>"
 
 Si el usuario es diferente a sa, ejecutar el siguiente comando
 ```bash
-setx /M DB_USERNAME "<nombre de usuario>"
+setx DB_USERNAME "<nombre de usuario>"
 ```
 
 ## Inserccion de datos
