@@ -42,3 +42,25 @@ Poner un nombre al perfil ej "docker-agro"
 Aceptar "Enable trust server certificate"
 
 Ejecutar el archivo creacion.sql
+
+## Importante si no tienen docker y quieren utilizar el dbms
+1. Ingresar en el dbms, iniciar sesion con autentificacion de windows
+2. Dar a expandir en la base de datos
+3. Expandir seguridad > Login
+4. Click derecho en sa > propiedades
+5. Cambiar la contraseña por *Apl1c@cionesInformat1c@*
+6. Ir a status y habilitar la base de datos
+
+### Variables de entorno
+Abrir una ventana de powershell o CMD
+```bash
+setx DB_PASSWORD "<colocar la clave del usuario de la base de datos>"
+```
+
+Si el usuario es diferente a sa, ejecutar el siguiente comando
+```bash
+setx /M DB_USERNAME "<nombre de usuario>"
+```
+
+## Inserccion de datos
+Copiar el script sql en dbms y ejecutarlo
