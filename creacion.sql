@@ -1,8 +1,9 @@
 -- Eliminar la base de datos si existe
 
--- use master;
+--use master;
+--GO
 
--- DROP DATABASE AgroservicioDB;
+--DROP DATABASE AgroservicioDB;
 
 
 CREATE DATABASE AgroservicioDB;
@@ -100,17 +101,6 @@ CREATE TABLE DetalleFacturaCompra(
     PRIMARY KEY (codigo_factura, codigo_producto)
 )
 
-CREATE TABLE Ingrediente(
-    id INT IDENTITY(1, 1) PRIMARY KEY,
-    nombre_ing VARCHAR(50),
-)
-
-CREATE TABLE ProductoIngrediente(
-    codigo_producto INT FOREIGN KEY REFERENCES Producto(codigo),
-    id_ingrediente INT FOREIGN KEY REFERENCES Ingrediente(id),
-    PRIMARY KEY (codigo_producto, id_ingrediente)
-)
-
 CREATE TABLE Usuario (
     id INT IDENTITY(1,1) PRIMARY KEY,
     nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
@@ -120,7 +110,7 @@ CREATE TABLE Usuario (
 
 -- Valores por defecto---------------------------------------------------------------------------------------
 INSERT INTO TiposIva (nombre_iva, valor_iva) VALUES ('IVA 12%', 0.12), ('Exento de IVA', 0), ('IVA 14%', 0.14);
-INSERT INTO Categoria (nombre_cat) VALUES ('GENERAL'), ('HERBICIDA'), ('INSECTICIDA'), ('FOLIARES');
+INSERT INTO Categoria (nombre_cat) VALUES ('Cereales'), ('Leguminosas'), ('Oleaginosas'), ('Hortalizas'), ('Frutales'), ('Ornamentales'), ('Tubérculos'), ('Medicinales-Aromáticas'), ('Tropicales'), ('Pasto');
 INSERT INTO Producto (nombre_prod, costo, precio, stock, id_categoria, imagen_url) 
 VALUES 
         ('KILLER LT', 3, 5, 40, 2, 'https://www.afecor.com/wp-content/uploads/2021/06/killer-1-litro.png'),
@@ -132,22 +122,10 @@ VALUES
         ('HERVAX LT', 4, 5, 50, 2, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/HERVAX-INMONTE-ENVASE.jpg');
 
 
-INSERT INTO Ingrediente (nombre_ing) VALUES ('ATRAZINA'), ('LUFENURON'), ('FOSFORO'), ('POTASIO'), ('PICLORAM'), ('PARAQUAT');
-
-INSERT INTO ProductoIngrediente (codigo_producto, id_ingrediente) VALUES 
-    (1, 6), (2, 1), (3, 3), (3, 4), (4, 5), (5, 4), (6, 4), (7, 6);
-
 INSERT INTO Cliente (ci_cli, nombre_cli, direccion_cli, email_cli) 
-VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido.com'),
+	VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido.com'),
         ('0650128846', 'ERICK MALAN', 'RIOBAMBA', 'erickmalan@espoch.edu.ec'),
-        ('0604152686', 'FRANKLIN', 'RIOBAMBA', 'franklin@espoch.edu.ec');
+        ('0604152686', 'FRANKLIN NOBOA', 'RIOBAMBA', 'franklin@espoch.edu.ec');
 
-INSERT INTO Usuario(nombre_usuario, clave) VALUES ('admin', 'admin'), ('vendedor', '123'), ('erick', '1234'), ('kevin','1234'), ('josue', '1234'),  ('andres', '1234'), ('franklin', '1234'), ('alex', '1234');
-        
--- aqui toca ingresar nuestros datos
-
--- revisale que mas falta, le quite eso de plaga, solo le deje cultivo
--- asi pueda buscar productos por cultivo 
-
---va jijija
--- 
+INSERT INTO Usuario(nombre_usuario, clave) 
+	VALUES ('admin', 'admin'), ('vendedor', '123'), ('erick', '1234'), ('kevin','1234'), ('josue', '1234'),  ('andres', '1234'), ('franklin', '1234'), ('alex', '1234');
