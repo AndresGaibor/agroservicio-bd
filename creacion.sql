@@ -142,7 +142,7 @@ VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido
         ('0650128846', 'ERICK MALAN', 'RIOBAMBA', 'erickmalan@espoch.edu.ec'),
         ('0604152686', 'FRANKLIN', 'RIOBAMBA', 'franklin@espoch.edu.ec');
 
-INSERT INTO Usuario(nombre_usuario, clave) VALUES ('admin', 'admin'), ('vendedor', '123');
+INSERT INTO Usuario(nombre_usuario, clave) VALUES ('admin', 'admin'), ('vendedor', '123'), ('erick', '1234'), ('kevin','1234'), ('josue', '1234'),  ('andres', '1234'), ('franklin', '1234'), ('alex', '1234');
         
 -- aqui toca ingresar nuestros datos
 
