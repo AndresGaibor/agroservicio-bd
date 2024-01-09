@@ -54,6 +54,8 @@ Ejecutar el archivo creacion.sql
 ### Variables de entorno
 Abrir una ventana de powershell o CMD
 ```bash
+setx DB_DATASOURCE "localhost,1433"
+
 setx DB_PASSWORD "<colocar la clave del usuario de la base de datos>"
 ```
 
