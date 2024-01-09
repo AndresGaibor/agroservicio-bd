@@ -50,6 +50,7 @@ CREATE TABLE Producto(
     stock INT DEFAULT 0 CHECK (stock >= 0),
     imagen_url VARCHAR(100),
     imagen_base64 VARCHAR(MAX),
+    id_prov INT FOREIGN KEY REFERENCES Proveedor(id_prov),
     id_categoria INT FOREIGN KEY REFERENCES Categoria(id) DEFAULT 1,
     id_iva INT FOREIGN KEY REFERENCES TiposIva(id) DEFAULT 1,
 )
