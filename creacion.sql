@@ -72,7 +72,7 @@ CREATE TABLE FacturaVenta(
 )
 
 CREATE TABLE DetalleFacturaVenta(
-    codigo_factura INT FOREIGN KEY REFERENCES FacturaVenta(secuencia),
+    codigo_factura INT FOREIGN KEY REFERENCES FacturaVenta(secuencia) ON DELETE CASCADE,
     codigo_producto INT FOREIGN KEY REFERENCES Producto(codigo),
     cantidad INT CHECK (cantidad >= 1),
     precio DECIMAL(10, 2) CHECK (precio >= 0),
@@ -112,21 +112,87 @@ CREATE TABLE Usuario (
 -- Valores por defecto---------------------------------------------------------------------------------------
 INSERT INTO TiposIva (nombre_iva, valor_iva) VALUES ('IVA 12%', 0.12), ('Exento de IVA', 0), ('IVA 14%', 0.14);
 INSERT INTO Categoria (nombre_cat) VALUES ('Cereales'), ('Leguminosas'), ('Oleaginosas'), ('Hortalizas'), ('Frutales'), ('Ornamentales'), ('Tubérculos'), ('Medicinales-Aromáticas'), ('Tropicales'), ('Pasto');
-INSERT INTO Producto (nombre_prod, costo, precio, stock, id_categoria, imagen_url) 
-VALUES 
-        ('KILLER LT', 3, 5, 40, 2, 'https://www.afecor.com/wp-content/uploads/2021/06/killer-1-litro.png'),
-        ('ATRADEL KG', 6, 7, 100, 2, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/ATRADEL-ENVASE.jpg'),
-        ('JISAFOL FOSFITO POTASIO LT', 4, 9, 20, 4, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/JISAFOL-ENVASE.jpg'),
-        ('PELION LT', 35, 42, 10, 2, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/PELION-ENVASE.jpg'),
-        ('KBH LT', 8, 15, 10, 4, 'https://www.afecor.com/wp-content/uploads/2022/09/KBH50-GRANDE-.png'),
-        ('MENOREL ENGROSE KG', 8, 15, 10, 4, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/MENOREL-ENGROSE-ENVASE.jpg'),
-        ('HERVAX LT', 4, 5, 50, 2, 'https://delmonteag.com.ec/wp-content/uploads/2021/10/HERVAX-INMONTE-ENVASE.jpg');
-
 
 INSERT INTO Cliente (ci_cli, nombre_cli, direccion_cli, email_cli) 
 	VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido.com'),
         ('0650128846', 'ERICK MALAN', 'RIOBAMBA', 'erickmalan@espoch.edu.ec'),
         ('0604152686', 'FRANKLIN NOBOA', 'RIOBAMBA', 'franklin@espoch.edu.ec');
 
+INSERT INTO Proveedor (ci_prov, nombre_prov, direccion_prov, telefono, email) 
+    VALUES ('9999999999', 'Genérico', 'Ecuador', '0999999999', 'generico@hotmail.com');
+
 INSERT INTO Usuario(nombre_usuario, clave) 
 	VALUES ('admin', 'admin'), ('vendedor', '123'), ('erick', '1234'), ('kevin','1234'), ('josue', '1234'),  ('andres', '1234'), ('franklin', '1234'), ('alex', '1234');
+
+GO
+--VISTAS
+
+--VISTA DE PRODUCTOS
+CREATE VIEW VistaProductos AS
+SELECT P.codigo AS Codigo, P.nombre_prod AS Nombre, P.precio AS Precio, P.costo AS Costo, P.stock AS Stock, C.nombre_cat AS Categoria, PR.nombre_prov AS Proveedor, T.nombre_iva AS IVA
+FROM Producto P JOIN Categoria C ON P.id_categoria = C.id
+JOIN Proveedor PR ON P.id_prov = PR.id_prov
+JOIN TiposIva T ON P.id_iva = T.id
+GO
+
+--VISTA DE CLIENTES
+CREATE VIEW VistaClientes AS 
+SELECT id AS Codigo, ci_cli AS Cedula, nombre_cli AS Nombre, direccion_cli AS Direccion, telefono_cli AS Telefono, email_cli AS Email, genero AS Genero
+FROM Cliente 
+GO
+
+--VISTA DE PROVEEDORES
+CREATE VIEW VistaProveedores AS
+SELECT id_prov AS Codigo, ci_prov AS Cedula, nombre_prov AS Nombre, direccion_prov AS Direccion, telefono AS Telefono, email AS Email
+FROM Proveedor
+GO
+
+--VISTA DE FACTURAS DE VENTA
+CREATE VIEW VistaFacturasVenta AS
+SELECT F.secuencia AS Secuencia, C.nombre_cli AS Cliente, F.fecha_emision AS Fecha, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
+GO
+
+--VISTA DE FACTURAS POR CLIENTE
+CREATE VIEW VistaFacturasCliente AS
+SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
+WHERE C.nombre_cli = 'CONSUMIDOR FINAL' --Cambia el nombre del cliente según se necesite
+GO
+
+CREATE PROCEDURE sp_ActualizarVistaFacturasPorCliente(@nombreCliente NVARCHAR(255))
+AS
+BEGIN
+    DECLARE @sqlQuery NVARCHAR(MAX)
+
+    SET @sqlQuery = '
+        CREATE OR ALTER VIEW VistaFacturasCliente AS
+        SELECT F.secuencia AS Secuencia, C.nombre_cli AS Cliente, F.fecha_emision AS Fecha, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+        FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
+        WHERE C.nombre_cli = ''' + @nombreCliente + ''';'
+
+    EXEC sp_executesql @sqlQuery
+END;
+GO
+
+--Vista Facturas En una Fecha
+CREATE VIEW VistaFacturasEnFecha AS
+SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
+WHERE F.fecha_emision = '2024-01-10' --Cambia la fecha según se necesite
+GO
+
+CREATE PROCEDURE sp_ActualizarVistaFacturasEnFecha(@fecha DATE)
+AS
+BEGIN
+    DECLARE @sqlQuery NVARCHAR(MAX)
+
+    SET @sqlQuery = '
+        CREATE OR ALTER VIEW VistaFacturasEnFecha AS
+        SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+        FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
+        WHERE F.fecha_emision = ''''' + CONVERT(NVARCHAR, @fecha, 120) + ''''''';'
+
+    EXEC sp_executesql @sqlQuery
+END;
+GO
