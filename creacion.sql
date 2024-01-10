@@ -167,7 +167,7 @@ BEGIN
 
     SET @sqlQuery = '
         CREATE OR ALTER VIEW VistaFacturasCliente AS
-        SELECT F.secuencia AS Secuencia, C.nombre_cli AS Cliente, F.fecha_emision AS Fecha, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+        SELECT F.secuencia AS NumFac, C.nombre_cli AS Nombre, F.fecha_emision AS FechaEmision, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
         FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
         WHERE C.nombre_cli = ''' + @nombreCliente + ''';'
 
@@ -189,12 +189,11 @@ BEGIN
 
     SET @sqlQuery = '
         CREATE OR ALTER VIEW VistaFacturasEnFecha AS
-        SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+        SELECT F.secuencia AS NumFac, C.nombre_cli AS Nombre, F.fecha_emision AS FechaEmision, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
         FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
         WHERE F.fecha_emision = ''''' + CONVERT(NVARCHAR, @fecha, 120) + ''''''';'
 
     EXEC sp_executesql @sqlQuery
 END;
 GO
-
 
