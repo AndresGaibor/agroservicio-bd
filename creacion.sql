@@ -197,3 +197,11 @@ BEGIN
 END;
 GO
 
+
+use AgroservicioDB;
+select * from Cliente;
+
+select * from FacturaVenta;
+select * from DetalleFacturaVenta;
+
+Select * FROM Cliente WHERE ci_cli = '1250'
