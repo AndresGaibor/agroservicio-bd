@@ -155,7 +155,7 @@ GO
 
 --VISTA DE FACTURAS POR CLIENTE
 CREATE VIEW VistaFacturasCliente AS
-SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+SELECT F.secuencia AS NumFac, C.nombre_cli AS Nombre, F.fecha_emision AS FechaEmision, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
 FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
 WHERE C.nombre_cli = 'CONSUMIDOR FINAL' --Cambia el nombre del cliente según se necesite
 GO
@@ -177,7 +177,7 @@ GO
 
 --Vista Facturas En una Fecha
 CREATE VIEW VistaFacturasEnFecha AS
-SELECT F.secuencia AS NumFac, C.nombre_cli AS [Nombre Cliente], F.fecha_emision AS [Fecha Emision], F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
+SELECT F.secuencia AS NumFac, C.nombre_cli AS Nombre, F.fecha_emision AS FechaEmision, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
 FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
 WHERE F.fecha_emision = '2024-01-10' --Cambia la fecha según se necesite
 GO
@@ -196,4 +196,5 @@ BEGIN
     EXEC sp_executesql @sqlQuery
 END;
 GO
+
 
