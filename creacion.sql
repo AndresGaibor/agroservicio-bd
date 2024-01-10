@@ -182,6 +182,9 @@ FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
 WHERE F.fecha_emision = '2024-01-10' --Cambia la fecha según se necesite
 GO
 
+DROP PROCEDURE sp_ActualizarVistaFacturasEnFecha
+GO
+
 CREATE PROCEDURE sp_ActualizarVistaFacturasEnFecha(@fecha DATE)
 AS
 BEGIN
@@ -191,17 +194,10 @@ BEGIN
         CREATE OR ALTER VIEW VistaFacturasEnFecha AS
         SELECT F.secuencia AS NumFac, C.nombre_cli AS Nombre, F.fecha_emision AS FechaEmision, F.subtotal AS Subtotal, F.iva AS IVA, F.total AS Total
         FROM FacturaVenta F JOIN Cliente C ON F.id_cliente = C.id
-        WHERE F.fecha_emision = ''''' + CONVERT(NVARCHAR, @fecha, 120) + ''''''';'
+        WHERE F.fecha_emision = ''' + CONVERT(NVARCHAR, @fecha, 120) + ''';'
 
     EXEC sp_executesql @sqlQuery
 END;
 GO
 
-
-use AgroservicioDB;
-select * from Cliente;
-
-select * from FacturaVenta;
-select * from DetalleFacturaVenta;
-
-Select * FROM Cliente WHERE ci_cli = '1250'
+EXEC sp_ActualizarVistaFacturasEnFecha '2024-01-10' --Ejemplo
