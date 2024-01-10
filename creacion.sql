@@ -25,8 +25,8 @@ CREATE TABLE Cliente(
     ci_cli VARCHAR(10) UNIQUE,
     nombre_cli VARCHAR(50),
     direccion_cli VARCHAR(50),
-    telefono_cli VARCHAR(10) CHECK (LEN(telefono_cli) = 10 AND telefono_cli NOT LIKE '%[^0-9]%'),
-    email_cli VARCHAR(50) CHECK (CHARINDEX('@', email_cli) > 0),
+    telefono_cli VARCHAR(10),
+    email_cli VARCHAR(50),
     genero CHAR DEFAULT 'M' CHECK (genero IN ('M', 'F'))
 )
 
@@ -113,10 +113,10 @@ CREATE TABLE Usuario (
 INSERT INTO TiposIva (nombre_iva, valor_iva) VALUES ('IVA 12%', 0.12), ('Exento de IVA', 0), ('IVA 14%', 0.14);
 INSERT INTO Categoria (nombre_cat) VALUES ('Cereales'), ('Leguminosas'), ('Oleaginosas'), ('Hortalizas'), ('Frutales'), ('Ornamentales'), ('Tubérculos'), ('Medicinales-Aromáticas'), ('Tropicales'), ('Pasto');
 
-INSERT INTO Cliente (ci_cli, nombre_cli, direccion_cli, email_cli) 
-	VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido.com'),
-        ('0650128846', 'ERICK MALAN', 'RIOBAMBA', 'erickmalan@espoch.edu.ec'),
-        ('0604152686', 'FRANKLIN NOBOA', 'RIOBAMBA', 'franklin@espoch.edu.ec');
+INSERT INTO Cliente (ci_cli, nombre_cli, direccion_cli, email_cli, telefono_cli) 
+	VALUES ('9999999999', 'CONSUMIDOR FINAL', 'NO DEFINIDA', 'nodefinidio@nodefinido.com', '0999999999'),
+        ('0650128846', 'ERICK MALAN', 'RIOBAMBA', 'erickmalan@espoch.edu.ec', '0999999999'),
+        ('0604152686', 'FRANKLIN NOBOA', 'RIOBAMBA', 'franklin@espoch.edu.ec', '0999999999');
 
 INSERT INTO Proveedor (ci_prov, nombre_prov, direccion_prov, telefono, email) 
     VALUES ('9999999999', 'Genérico', 'Ecuador', '0999999999', 'generico@hotmail.com');
@@ -196,3 +196,4 @@ BEGIN
     EXEC sp_executesql @sqlQuery
 END;
 GO
+
